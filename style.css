@@ -1,0 +1,170 @@
+/* CSS = das DESIGN der Seite: Farben, Schriften, Abstände. */
+
+/* ----- Farben an einer Stelle. Ändere sie hier, dann ändert sich die ganze Seite ----- */
+:root {
+  --hintergrund: #ffffff;
+  --hintergrund-grau: #f5f5f7;
+  --text: #1d1d1f;
+  --text-leise: #6e6e73;
+  --akzent: #0071e3;
+  --karte: #ffffff;
+  --verlauf: linear-gradient(90deg, #0071e3, #9b51e0, #ff375f);
+}
+
+/* Dunkelmodus: wird automatisch benutzt, wenn dein Gerät auf "Dunkel" steht */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hintergrund: #000000;
+    --hintergrund-grau: #111113;
+    --text: #f5f5f7;
+    --text-leise: #a1a1a6;
+    --akzent: #2997ff;
+    --karte: #1c1c1e;
+  }
+}
+
+/* ----- Grundeinstellungen ----- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }   /* sanftes Scrollen bei Klick auf Links */
+
+body {
+  /* Auf Apple-Geräten wird die Apple-Systemschrift benutzt, sonst eine ähnliche */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--hintergrund);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ----- Navigationsleiste: durchsichtig mit Milchglas-Effekt ----- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;   /* alles in die Mitte, wie bei Apple */
+  gap: 40px;                 /* Abstand zwischen Name und Links */
+  align-items: center;
+  padding: 14px 24px;
+  /* Dunkelgrau, zu 80 % deckend (0.8) – der Rest scheint milchig durch */
+  background: rgba(22, 22, 23, 0.8);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+.nav a { color: #f5f5f7; text-decoration: none; font-size: 12px; }
+.nav .nav-logo { font-weight: 600; font-size: 14px; }   /* genauer als ".nav a" → gewinnt (Spezifität!) */
+.nav-links a { margin-left: 32px; opacity: 0.8; }
+.nav-links a:hover { opacity: 1; }
+
+/* ----- Großer Startbereich ----- */
+.hero {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+}
+.eyebrow { color: var(--text-leise); font-weight: 600; font-size: 18px; margin-bottom: 8px; }
+h1 {
+  font-size: clamp(44px, 8vw, 96px);   /* passt sich der Bildschirmbreite an */
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.gradient-text {
+  background: var(--verlauf);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-sub { font-size: clamp(20px, 3vw, 28px); color: var(--text-leise); margin: 20px 0 36px; }
+
+.button {
+  background: var(--akzent);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 980px;   /* ganz runde "Pillen"-Form */
+  border: 2px solid var(--akzent);   /* blauer Rand, damit man den Knopf auch in Weiß noch sieht */
+  text-decoration: none;
+  font-size: 17px;
+  transition: background 0.3s, color 0.3s;   /* Farbwechsel dauert 0,3 Sekunden */
+}
+/* :hover = "solange die Maus drauf ist" */
+.button:hover {
+  background: #ffffff;
+  color: var(--akzent);
+}
+
+/* ----- Abschnitte ----- */
+.section { padding: 120px 24px; max-width: 1100px; margin: 0 auto; }
+.section-grey {
+  max-width: none;
+  background: var(--hintergrund-grau);
+}
+.section-grey > * { max-width: 1052px; margin-left: auto; margin-right: auto; }
+
+/* Schwarzer Abschnitt mit heller Schrift – starker Kontrast wie bei Apple */
+.section-dark {
+  max-width: none;
+  background: #000000;
+  color: #f5f5f7;
+}
+.section-dark > * { max-width: 1052px; margin-left: auto; margin-right: auto; }
+.section-dark .card { background: #1c1c1e; box-shadow: none; }
+.section-dark .card p { color: #a1a1a6; }
+
+h2 {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 40px;
+}
+.lead { font-size: clamp(20px, 2.4vw, 28px); color: var(--text-leise); max-width: 800px; }
+
+/* ----- Karten im Raster ----- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));   /* so viele Spalten, wie Platz ist */
+  gap: 20px;
+}
+.card {
+  background: var(--karte);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+.card-icon { font-size: 40px; margin-bottom: 16px; }
+.card h3 { font-size: 22px; margin-bottom: 8px; }
+.card p { color: var(--text-leise); }
+.tag {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--akzent);
+  font-weight: 600;
+}
+
+/* ----- Fußzeile ----- */
+.footer { text-align: center; padding: 40px 24px; color: var(--text-leise); font-size: 13px; }
+
+/* ----- Einblend-Animation beim Scrollen ----- */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.sichtbar { opacity: 1; transform: none; }
+
+/* Karten anheben – muss NACH .reveal.sichtbar stehen und genauer sein, sonst wird es überschrieben */
+.card.sichtbar { transition: opacity 0.8s ease, transform 0.4s ease; }
+.card.sichtbar:hover { transform: translateY(-6px); }
+
+/* ----- Handy: Navigation kleiner ----- */
+@media (max-width: 600px) {
+  .nav { gap: 16px; }
+  .nav-links a { margin-left: 14px; }
+  .section { padding: 80px 16px; }
+}
