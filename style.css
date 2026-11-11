@@ -1,130 +1,291 @@
-/* CSS = das DESIGN der Seite: Farben, Schriften, Abstände. */
+/* CSS = das DESIGN der Seite: Farben, Schriften, Abstände.
+   Stil: dunkel, sportlich, riesige Schrift und eine knallige Neon-Farbe. */
 
 /* ----- Farben an einer Stelle. Ändere sie hier, dann ändert sich die ganze Seite ----- */
 :root {
-  --hintergrund: #ffffff;
-  --hintergrund-grau: #f5f5f7;
-  --text: #1d1d1f;
-  --text-leise: #6e6e73;
-  --akzent: #0071e3;
-  --karte: #ffffff;
-  --verlauf: linear-gradient(90deg, #0071e3, #9b51e0, #ff375f);
-}
-
-/* Dunkelmodus: wird automatisch benutzt, wenn dein Gerät auf "Dunkel" steht */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --hintergrund: #000000;
-    --hintergrund-grau: #111113;
-    --text: #f5f5f7;
-    --text-leise: #a1a1a6;
-    --akzent: #2997ff;
-    --karte: #1c1c1e;
-  }
+  --hintergrund: #0d0f0b;      /* fast Schwarz mit einem Hauch Grün */
+  --karte: #171a14;            /* etwas heller für die Karten */
+  --linie: #2a2e25;            /* dünne Rahmen */
+  --text: #f2f2ec;
+  --text-leise: #9a9c92;
+  --akzent: #d4ff00;           /* Neon-Gelbgrün – probier mal #ff5a1f (Orange) oder #00e5ff (Türkis)! */
+  --schrift-gross: "Anton", Impact, sans-serif;
+  --schrift-text: "Inter", "Segoe UI", Arial, sans-serif;
 }
 
 /* ----- Grundeinstellungen ----- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }   /* sanftes Scrollen bei Klick auf Links */
-
 body {
-  /* Auf Apple-Geräten wird die Apple-Systemschrift benutzt, sonst eine ähnliche */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--schrift-text);
   background: var(--hintergrund);
   color: var(--text);
   line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;   /* verhindert seitliches Scrollen durch das schräge Laufband */
 }
 
-/* ----- Navigationsleiste: durchsichtig mit Milchglas-Effekt ----- */
+/* Einstellungen, die Lenis (weiches Scrollen) braucht */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+/* Markierter Text bekommt die Akzentfarbe */
+::selection { background: var(--akzent); color: var(--hintergrund); }
+
+.punkt { color: var(--akzent); }
+
+/* ----- Intro (Startbildschirm mit Wellen-Bildern) ----- */
+.intro {
+  position: fixed;
+  inset: 0;                      /* deckt den ganzen Bildschirm ab */
+  z-index: 200;                  /* liegt über allem */
+  background: var(--hintergrund);
+  overflow: hidden;
+}
+.intro-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.intro-name {
+  position: absolute;
+  left: 40px; bottom: 24px;
+  font-family: var(--schrift-gross);
+  font-size: clamp(80px, 18vw, 260px);
+  line-height: 0.85;
+  color: #fff;
+  mix-blend-mode: difference;    /* Farbe dreht sich je nach Bild darunter um */
+  pointer-events: none;
+}
+.intro-hinweis {
+  position: absolute;
+  top: 28px; left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  mix-blend-mode: difference;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  pointer-events: none;
+}
+.intro-start {
+  position: absolute;
+  right: 40px; bottom: 40px;
+  font-family: var(--schrift-text);
+  background: var(--akzent);
+  color: var(--hintergrund);
+  border: 2px solid var(--akzent);
+  border-radius: 980px;
+  padding: 18px 36px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  opacity: 0;                    /* erscheint erst nach kurzer Zeit (script.js) */
+}
+.intro-start:hover { background: var(--hintergrund); color: var(--akzent); }
+
+/* ----- Eigener Mauszeiger ----- */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--akzent);
+  pointer-events: none;          /* Klicks gehen durch den Kreis hindurch */
+  z-index: 300;                  /* über allem, auch über dem Intro */
+  mix-blend-mode: difference;    /* dreht die Farben darunter um – sieht cool aus */
+  transform: translate(-50%, -50%);
+  transition: width 0.25s, height 0.25s;
+}
+.cursor.gross { width: 60px; height: 60px; }   /* wenn die Maus über einem Link ist */
+/* Auf Handys gibt es keine Maus → Kreis ausblenden */
+@media (hover: none) { .cursor { display: none; } }
+
+/* ----- Navigationsleiste ----- */
 .nav {
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: 0; left: 0; right: 0;
   z-index: 10;
   display: flex;
-  justify-content: center;   /* alles in die Mitte, wie bei Apple */
-  gap: 40px;                 /* Abstand zwischen Name und Links */
+  justify-content: space-between;   /* Name links, Links rechts */
   align-items: center;
-  padding: 14px 24px;
-  /* Dunkelgrau, zu 80 % deckend (0.8) – der Rest scheint milchig durch */
-  background: rgba(22, 22, 23, 0.8);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  padding: 20px 40px;
+  mix-blend-mode: difference;       /* bleibt auf jedem Hintergrund lesbar */
 }
-.nav a { color: #f5f5f7; text-decoration: none; font-size: 12px; }
-.nav .nav-logo { font-weight: 600; font-size: 14px; }   /* genauer als ".nav a" → gewinnt (Spezifität!) */
-.nav-links a { margin-left: 32px; opacity: 0.8; }
-.nav-links a:hover { opacity: 1; }
+.nav a { color: #fff; text-decoration: none; }
+.nav-logo { font-family: var(--schrift-gross); font-size: 28px; letter-spacing: 0.02em; }
+.nav-links a {
+  margin-left: 32px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;   /* alles in GROSSBUCHSTABEN */
+  letter-spacing: 0.1em;
+}
+.nav-links a:hover { text-decoration: underline; }
 
 /* ----- Großer Startbereich ----- */
 .hero {
-  min-height: 90vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;   /* Inhalt nach unten schieben */
+  padding: 0 40px 80px;
+}
+.eyebrow {
+  color: var(--akzent);
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+}
+h1, h2, h3 { font-family: var(--schrift-gross); font-weight: 400; text-transform: uppercase; }
+h1 {
+  font-size: clamp(64px, 14vw, 220px);   /* passt sich der Bildschirmbreite an */
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+.akzent-text { color: var(--akzent); }
+.hero-sub { font-size: clamp(18px, 2.4vw, 26px); color: var(--text-leise); margin: 28px 0 36px; }
+
+.button {
+  align-self: flex-start;
+  display: inline-block;
+  background: var(--akzent);
+  color: var(--hintergrund);
+  padding: 18px 36px;
+  border-radius: 980px;   /* ganz runde "Pillen"-Form */
+  border: 2px solid var(--akzent);
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 15px;
+  transition: background 0.3s, color 0.3s;   /* Farbwechsel dauert 0,3 Sekunden */
+}
+/* :hover = "solange die Maus drauf ist" */
+.button:hover { background: transparent; color: var(--akzent); }
+
+/* ----- Zerlegte Überschriften (Buchstaben-Animation) -----
+   Jedes Wort ist eine Box mit "overflow: hidden". Die Buchstaben starten
+   UNTERHALB der Box (unsichtbar) und rutschen dann nach oben rein. */
+.wort {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.05em;   /* damit nichts unten abgeschnitten wird */
+}
+.buchstabe { display: inline-block; }
+
+/* ----- Laufband ----- */
+.laufband {
+  background: var(--akzent);
+  color: var(--hintergrund);
+  padding: 18px 0;
+  overflow: hidden;                        /* was rausragt, wird abgeschnitten */
+  transform: rotate(-2deg) scale(1.05);    /* leicht schräg – wirkt dynamisch */
+}
+.laufband-inhalt {
+  display: flex;
+  width: max-content;
+  animation: laufen 20s linear infinite;   /* 20 Sekunden pro Runde, für immer */
+}
+.laufband span {
+  font-family: var(--schrift-gross);
+  font-size: clamp(28px, 4vw, 48px);
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding-right: 0.3em;
+}
+/* @keyframes = die einzelnen Schritte einer Animation */
+@keyframes laufen {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }   /* genau eine Text-Hälfte weiter → nahtlos */
+}
+
+/* ----- Abschnitte ----- */
+.section { padding: 140px 40px; max-width: 1200px; margin: 0 auto; }
+.nummer {
+  color: var(--akzent);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 12px;
+}
+h2 {
+  font-size: clamp(48px, 8vw, 110px);
+  line-height: 0.95;
+  margin-bottom: 48px;
+}
+.lead { font-size: clamp(20px, 2.2vw, 28px); color: var(--text-leise); }
+
+/* ----- Über mich: zwei Spalten ----- */
+.ueber-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;   /* linke Spalte etwas breiter */
+  gap: 60px;
+  align-items: center;
+}
+.foto-rahmen {
+  border-radius: 20px;
+  overflow: hidden;      /* das Foto darf nicht aus dem Rahmen ragen */
+  aspect-ratio: 4 / 5;   /* Hochformat */
+}
+.foto { width: 100%; height: 100%; object-fit: cover; display: block; }
+.platzhalter {
+  background: linear-gradient(135deg, #1f2419, #2f3a1a);
+  border: 2px dashed var(--linie);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  padding: 0 24px;
+  gap: 12px;
+  font-size: 64px;
 }
-.eyebrow { color: var(--text-leise); font-weight: 600; font-size: 18px; margin-bottom: 8px; }
-h1 {
-  font-size: clamp(44px, 8vw, 96px);   /* passt sich der Bildschirmbreite an */
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+.platzhalter span { font-size: 15px; color: var(--text-leise); }
+
+/* ----- Projekte: seitlich scrollender Bereich ----- */
+.horizontal { overflow: hidden; }
+.spur {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: 100vh;
+  width: max-content;      /* so breit wie alle Karten zusammen */
+  padding: 0 40px;
 }
-.gradient-text {
-  background: var(--verlauf);
-  -webkit-background-clip: text;
-  background-clip: text;
+.panel-titel { width: min(600px, 80vw); flex-shrink: 0; }
+.panel-titel h2 { margin-bottom: 24px; }
+.hinweis { color: var(--text-leise); text-transform: uppercase; letter-spacing: 0.15em; font-size: 13px; }
+.projekt-karte {
+  position: relative;
+  width: min(460px, 80vw);
+  height: 60vh;
+  flex-shrink: 0;          /* Karten dürfen nicht zusammengequetscht werden */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--karte);
+  border: 1px solid var(--linie);
+  border-radius: 24px;
+  padding: 40px;
+  transition: border-color 0.3s, transform 0.4s;
+}
+.projekt-karte:hover { border-color: var(--akzent); transform: translateY(-8px); }
+.projekt-nr {
+  position: absolute;
+  top: 24px; right: 32px;
+  font-family: var(--schrift-gross);
+  font-size: 120px;
+  line-height: 1;
   color: transparent;
+  -webkit-text-stroke: 1px var(--linie);   /* nur der Umriss der Zahl */
+  transition: -webkit-text-stroke-color 0.3s;
 }
-.hero-sub { font-size: clamp(20px, 3vw, 28px); color: var(--text-leise); margin: 20px 0 36px; }
+.projekt-karte:hover .projekt-nr { -webkit-text-stroke-color: var(--akzent); }
+.projekt-karte h3 { font-size: 40px; margin-bottom: 8px; }
+.projekt-karte p { color: var(--text-leise); }
 
-.button {
-  background: var(--akzent);
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 980px;   /* ganz runde "Pillen"-Form */
-  border: 2px solid var(--akzent);   /* blauer Rand, damit man den Knopf auch in Weiß noch sieht */
-  text-decoration: none;
-  font-size: 17px;
-  transition: background 0.3s, color 0.3s;   /* Farbwechsel dauert 0,3 Sekunden */
-}
-/* :hover = "solange die Maus drauf ist" */
-.button:hover {
-  background: #ffffff;
-  color: var(--akzent);
-}
-
-/* ----- Abschnitte ----- */
-.section { padding: 120px 24px; max-width: 1100px; margin: 0 auto; }
-.section-grey {
-  max-width: none;
-  background: var(--hintergrund-grau);
-}
-.section-grey > * { max-width: 1052px; margin-left: auto; margin-right: auto; }
-
-/* Schwarzer Abschnitt mit heller Schrift – starker Kontrast wie bei Apple */
-.section-dark {
-  max-width: none;
-  background: #000000;
-  color: #f5f5f7;
-}
-.section-dark > * { max-width: 1052px; margin-left: auto; margin-right: auto; }
-.section-dark .card { background: #1c1c1e; box-shadow: none; }
-.section-dark .card p { color: #a1a1a6; }
-
-h2 {
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 40px;
-}
-.lead { font-size: clamp(20px, 2.4vw, 28px); color: var(--text-leise); max-width: 800px; }
-
-/* ----- Karten im Raster ----- */
+/* ----- Karten im Raster (Interessen) ----- */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));   /* so viele Spalten, wie Platz ist */
@@ -132,23 +293,37 @@ h2 {
 }
 .card {
   background: var(--karte);
-  border-radius: 24px;
+  border: 1px solid var(--linie);
+  border-radius: 20px;
   padding: 32px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
 }
-.card-icon { font-size: 40px; margin-bottom: 16px; }
-.card h3 { font-size: 22px; margin-bottom: 8px; }
+.card-icon { font-size: 40px; margin-bottom: 20px; }
+.card h3 { font-size: 30px; letter-spacing: 0.01em; margin-bottom: 8px; }
 .card p { color: var(--text-leise); }
 .tag {
+  align-self: flex-start;
   display: inline-block;
-  margin-top: 16px;
-  font-size: 13px;
+  margin-top: 20px;
+  padding: 4px 12px;
+  border: 1px solid var(--akzent);
+  border-radius: 980px;
+  font-size: 12px;
   color: var(--akzent);
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* ----- Fußzeile ----- */
-.footer { text-align: center; padding: 40px 24px; color: var(--text-leise); font-size: 13px; }
+.footer { padding: 80px 40px 40px; color: var(--text-leise); font-size: 13px; border-top: 1px solid var(--linie); }
+.footer-gross {
+  font-family: var(--schrift-gross);
+  font-size: clamp(64px, 16vw, 240px);
+  line-height: 1;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
 
 /* ----- Einblend-Animation beim Scrollen ----- */
 .reveal {
@@ -158,13 +333,26 @@ h2 {
 }
 .reveal.sichtbar { opacity: 1; transform: none; }
 
-/* Karten anheben – muss NACH .reveal.sichtbar stehen und genauer sein, sonst wird es überschrieben */
-.card.sichtbar { transition: opacity 0.8s ease, transform 0.4s ease; }
-.card.sichtbar:hover { transform: translateY(-6px); }
+/* Karten beim Drüberfahren: anheben und Rahmen leuchtet.
+   Muss NACH .reveal.sichtbar stehen und genauer sein, sonst wird es überschrieben */
+.card.sichtbar { transition: opacity 0.8s ease, transform 0.4s ease, border-color 0.3s; }
+.card.sichtbar:hover { transform: translateY(-6px); border-color: var(--akzent); }
 
-/* ----- Handy: Navigation kleiner ----- */
+/* ----- Tablet & Handy: alles untereinander statt nebeneinander ----- */
+@media (max-width: 768px) {
+  .ueber-layout { grid-template-columns: 1fr; gap: 40px; }
+  /* Projekte scrollen hier ganz normal nach unten */
+  .spur { flex-direction: column; align-items: stretch; height: auto; width: auto; padding: 90px 16px; }
+  .panel-titel, .projekt-karte { width: auto; }
+  .projekt-karte { height: auto; min-height: 320px; }
+  .hinweis { display: none; }
+}
 @media (max-width: 600px) {
-  .nav { gap: 16px; }
-  .nav-links a { margin-left: 14px; }
-  .section { padding: 80px 16px; }
+  .nav { padding: 16px; }
+  .nav-links a { margin-left: 12px; font-size: 11px; letter-spacing: 0.05em; }
+  .hero { padding: 0 16px 60px; }
+  .section { padding: 90px 16px; }
+  .footer { padding: 60px 16px 32px; }
+  .intro-name { left: 16px; bottom: 100px; }
+  .intro-start { right: 16px; bottom: 24px; }
 }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- HTML = das GERÜST der Seite: Was steht wo? -->
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <!-- Sorgt dafür, dass die Seite auf Handy und iPad richtig skaliert -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tom – Portfolio</title>
+  <!-- Verbindet das Design (CSS) mit dieser Seite -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Navigationsleiste oben (bleibt beim Scrollen stehen) ===== -->
+  <nav class="nav">
+    <a href="#start" class="nav-logo">Tom</a>
+    <div class="nav-links">
+      <a href="#ueber-mich">Über mich</a>
+      <a href="#projekte">Projekte</a>
+      <a href="#interessen">Interessen</a>
+    </div>
+  </nav>
+
+  <!-- ===== Großer Startbereich ("Hero") ===== -->
+  <header id="start" class="hero">
+    <p class="eyebrow reveal">Portfolio</p>
+    <h1 class="reveal">Hi, ich bin <span class="gradient-text">Tom.</span></h1>
+    <p class="hero-sub reveal">Handballer. Tüftler. Programmierer</p>
+    <a href="#projekte" class="button reveal">Meine Projekte ansehen</a>
+  </header>
+
+  <main>
+    <!-- ===== Über mich ===== -->
+    <section id="ueber-mich" class="section">
+      <h2 class="reveal">Über mich</h2>
+      <p class="lead reveal">
+        Ich bin 15 und interessiere mich seit der Grundschule für IT.
+        Angefangen hat alles mit Scratch – heute programmiere ich mit Python,
+        probiere mich mit Neuem aus und baue Websites. Wenn ich nicht am Rechner
+        sitze, stehe ich in der Handballhalle oder bin mit dem Bike im Wald unterwegs.
+      </p>
+    </section>
+
+    <!-- ===== Projekte: jede "card" ist eine Karte ===== -->
+    <section id="projekte" class="section section-grey">
+      <h2 class="reveal">Projekte</h2>
+      <div class="grid">
+
+        <article class="card reveal">
+          <div class="card-icon">🎲</div>
+          <h3>Würfelspiel</h3>
+          <p>Ein Python-Spiel gegen den Computer. Wer zuerst 3 Runden gewinnt, hat gewonnen.</p>
+          <span class="tag">Python</span>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon">🌐</div>
+          <h3>Diese Website</h3>
+          <p>Meine eigene Portfolio-Seite, gebaut mit HTML, CSS und JavaScript.</p>
+          <span class="tag">HTML · CSS · JS</span>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-icon">🤖</div>
+          <h3>ChatBot </h3>
+          <p>Ein Chatbot für Schulwebsites – eine Schülerfirma im Team mit acht Leuten.</p>
+          <span class="tag">Teamprojekt</span>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ===== Interessen ===== -->
+    <section id="interessen" class="section section-dark">
+      <h2 class="reveal">Was mich antreibt</h2>
+      <div class="grid">
+        <div class="card reveal"><div class="card-icon">🤾</div><h3>Handball</h3><p>Seit über 12 Jahren, leistungsorientiert.</p></div>
+        <div class="card reveal"><div class="card-icon">💻</div><h3>IT &amp; KI</h3><p>Programmieren, Technik verstehen, Neues ausprobieren.</p></div>
+        <div class="card reveal"><div class="card-icon">🔧</div><h3>Reparieren</h3><p>Alte Geräte zerlegen und wieder zum Laufen bringen - um sie für etwas zu nutzen</p></div>
+        <div class="card reveal"><div class="card-icon">🚵</div><h3>Draußen</h3><p>Mountainbike, Gravelbike und im Wald.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Tom · Gebaut mit HTML, CSS &amp; JavaScript</p>
+  </footer>
+
+  <!-- Verbindet das Verhalten (JavaScript) mit dieser Seite -->
+  <script src="script.js"></script>
+</body>
+</html>

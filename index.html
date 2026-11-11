@@ -6,14 +6,29 @@
   <!-- Sorgt dafür, dass die Seite auf Handy und iPad richtig skaliert -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tom – Portfolio</title>
+  <!-- Schriften von Google laden: "Anton" (groß, fett, sportlich) und "Inter" (gut lesbar) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <!-- Verbindet das Design (CSS) mit dieser Seite -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ===== Navigationsleiste oben (bleibt beim Scrollen stehen) ===== -->
+  <!-- ===== Intro: zwei Bilder vermischen sich in Wellen (gemalt in intro.js) ===== -->
+  <div class="intro">
+    <canvas class="intro-canvas"></canvas>
+    <p class="intro-name">TOM<span class="punkt">.</span></p>
+    <p class="intro-hinweis">Bewege die Maus</p>
+    <button class="intro-start">Los geht's →</button>
+  </div>
+
+  <!-- Eigener Mauszeiger: ein Kreis, der der Maus folgt (gesteuert in script.js) -->
+  <div class="cursor"></div>
+
+  <!-- ===== Navigationsleiste oben ===== -->
   <nav class="nav">
-    <a href="#start" class="nav-logo">Tom</a>
+    <a href="#start" class="nav-logo">TOM<span class="punkt">.</span></a>
     <div class="nav-links">
       <a href="#ueber-mich">Über mich</a>
       <a href="#projekte">Projekte</a>
@@ -23,46 +38,76 @@
 
   <!-- ===== Großer Startbereich ("Hero") ===== -->
   <header id="start" class="hero">
-    <p class="eyebrow reveal">Portfolio</p>
-    <h1 class="reveal">Hi, ich bin <span class="gradient-text">Tom.</span></h1>
-    <p class="hero-sub reveal">Handballer. Tüftler. Programmierer</p>
-    <a href="#projekte" class="button reveal">Meine Projekte ansehen</a>
+    <p class="eyebrow hero-teil">Portfolio · 2026</p>
+    <!-- class="split" = diese Überschrift wird in einzelne Buchstaben zerlegt (siehe script.js) -->
+    <h1 class="split">Hi, ich bin<br><span class="akzent-text">Tom.</span></h1>
+    <p class="hero-sub hero-teil">Handballer. Tüftler. Programmierer.</p>
+    <!-- class="magnet" = der Knopf wird von der Maus angezogen -->
+    <a href="#projekte" class="button magnet hero-teil">Meine Projekte ansehen →</a>
   </header>
 
+  <!-- ===== Laufband: der Text läuft endlos von rechts nach links ===== -->
+  <!-- Der Text steht ZWEIMAL drin, damit es ohne Lücke weiterläuft -->
+  <div class="laufband" aria-hidden="true">
+    <div class="laufband-inhalt">
+      <span>Handball ✦ Python ✦ Websites ✦ Mountainbike ✦ KI ✦ Reparieren ✦ </span>
+      <span>Handball ✦ Python ✦ Websites ✦ Mountainbike ✦ KI ✦ Reparieren ✦ </span>
+    </div>
+  </div>
+
   <main>
-    <!-- ===== Über mich ===== -->
+    <!-- ===== Über mich: Text links, Foto rechts ===== -->
     <section id="ueber-mich" class="section">
-      <h2 class="reveal">Über mich</h2>
-      <p class="lead reveal">
-        Ich bin 15 und interessiere mich seit der Grundschule für IT.
-        Angefangen hat alles mit Scratch – heute programmiere ich mit Python,
-        probiere mich mit Neuem aus und baue Websites. Wenn ich nicht am Rechner
-        sitze, stehe ich in der Handballhalle oder bin mit dem Bike im Wald unterwegs.
-      </p>
+      <p class="nummer reveal">01 — Über mich</p>
+      <h2 class="split">Wer ich bin</h2>
+      <div class="ueber-layout">
+        <p class="lead reveal">
+          Ich bin 15 und interessiere mich seit der Grundschule für IT.
+          Angefangen hat alles mit Scratch – heute programmiere ich mit Python,
+          probiere mich mit Neuem aus und baue Websites. Wenn ich nicht am Rechner
+          sitze, stehe ich in der Handballhalle oder bin mit dem Bike im Wald unterwegs.
+        </p>
+        <!-- Der Rahmen deckt das Foto beim Scrollen von unten nach oben auf -->
+        <div class="foto-rahmen">
+          <!-- EIGENES FOTO EINBAUEN: Leg z. B. "tom.jpg" in den Website-Ordner und
+               ersetze die nächste Zeile durch:
+               <img src="tom.jpg" alt="Tom beim Handball" class="foto"> -->
+          <div class="foto platzhalter">📸<span>Hier kommt dein Foto hin</span></div>
+        </div>
+      </div>
     </section>
 
-    <!-- ===== Projekte: jede "card" ist eine Karte ===== -->
-    <section id="projekte" class="section section-grey">
-      <h2 class="reveal">Projekte</h2>
-      <div class="grid">
+    <!-- ===== Projekte: fahren beim Runterscrollen SEITLICH durch ===== -->
+    <section id="projekte" class="horizontal">
+      <!-- Die "Spur" ist ein langer Streifen, der nach links geschoben wird -->
+      <div class="spur">
 
-        <article class="card reveal">
+        <div class="panel-titel">
+          <p class="nummer">02 — Projekte</p>
+          <h2 class="split">Was ich<br>gebaut habe</h2>
+          <p class="hinweis">Weiter scrollen →</p>
+        </div>
+
+        <article class="projekt-karte">
+          <span class="projekt-nr">01</span>
           <div class="card-icon">🎲</div>
           <h3>Würfelspiel</h3>
           <p>Ein Python-Spiel gegen den Computer. Wer zuerst 3 Runden gewinnt, hat gewonnen.</p>
           <span class="tag">Python</span>
         </article>
 
-        <article class="card reveal">
+        <article class="projekt-karte">
+          <span class="projekt-nr">02</span>
           <div class="card-icon">🌐</div>
           <h3>Diese Website</h3>
-          <p>Meine eigene Portfolio-Seite, gebaut mit HTML, CSS und JavaScript.</p>
+          <p>Meine eigene Portfolio-Seite, gebaut mit HTML, CSS und JavaScript – mit Animationen von GSAP.</p>
           <span class="tag">HTML · CSS · JS</span>
         </article>
 
-        <article class="card reveal">
+        <article class="projekt-karte">
+          <span class="projekt-nr">03</span>
           <div class="card-icon">🤖</div>
-          <h3>ChatBot </h3>
+          <h3>ChatBot</h3>
           <p>Ein Chatbot für Schulwebsites – eine Schülerfirma im Team mit acht Leuten.</p>
           <span class="tag">Teamprojekt</span>
         </article>
@@ -71,22 +116,32 @@
     </section>
 
     <!-- ===== Interessen ===== -->
-    <section id="interessen" class="section section-dark">
-      <h2 class="reveal">Was mich antreibt</h2>
+    <section id="interessen" class="section">
+      <p class="nummer reveal">03 — Interessen</p>
+      <h2 class="split">Was mich antreibt</h2>
       <div class="grid">
         <div class="card reveal"><div class="card-icon">🤾</div><h3>Handball</h3><p>Seit über 12 Jahren, leistungsorientiert.</p></div>
         <div class="card reveal"><div class="card-icon">💻</div><h3>IT &amp; KI</h3><p>Programmieren, Technik verstehen, Neues ausprobieren.</p></div>
-        <div class="card reveal"><div class="card-icon">🔧</div><h3>Reparieren</h3><p>Alte Geräte zerlegen und wieder zum Laufen bringen - um sie für etwas zu nutzen</p></div>
+        <div class="card reveal"><div class="card-icon">🔧</div><h3>Reparieren</h3><p>Alte Geräte zerlegen und wieder zum Laufen bringen – um sie für etwas zu nutzen.</p></div>
         <div class="card reveal"><div class="card-icon">🚵</div><h3>Draußen</h3><p>Mountainbike, Gravelbike und im Wald.</p></div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
+    <p class="footer-gross split">Let's go<span class="punkt">.</span></p>
     <p>© 2026 Tom · Gebaut mit HTML, CSS &amp; JavaScript</p>
   </footer>
 
-  <!-- Verbindet das Verhalten (JavaScript) mit dieser Seite -->
+  <!-- ===== Fremde Bibliotheken (fertiger Code von anderen, kostenlos) =====
+       GSAP + ScrollTrigger: Animationen, die beim Scrollen ablaufen
+       Lenis: weiches, gleitendes Scrollen -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <!-- Unser eigener Code – muss NACH den Bibliotheken kommen, weil er sie benutzt -->
+  <script src="intro.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
